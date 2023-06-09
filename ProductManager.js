@@ -17,8 +17,13 @@ class ProductManager {
     }
 
     getProducts = async () => {
-        const productos = await fs.promises.readFile(this.path, "utf-8");
-        return JSON.parse(productos)
+        if (fs.existsSync(this.path)) {
+            const productos = await fs.promises.readFile(this.path, "utf-8");
+            const data = JSON.parse(productos)
+            return console.log(data);
+        } else {
+            return console.log([])
+        }
     }
     getProductById(id) {
         const product = this.products.find(product => product.id === id)
@@ -76,5 +81,5 @@ manager.createProduct(producto4);
 manager.addProduct();
 manager.getProducts();
 // console.log(manager.products)
-// console.log(manager.getProducts())
+console.log(manager.getProducts())
 // console.log(manager.deleteProduct(2))
