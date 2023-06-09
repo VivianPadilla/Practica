@@ -37,6 +37,12 @@ class ProductManager {
     deleteProduct(id) {
         this.products = this.products.filter(product => product.id !== id)
     }
+
+    updateProduct(id, newProduct) {
+        const product = this.products.map(product => product.id === id ? { ...product, ...newProduct } : product)
+        return product
+        // fs.promises.writeFile(this.path, JSON.stringify(product));
+    }
 }
 
 const producto1 = {
@@ -79,7 +85,11 @@ manager.createProduct(producto2);
 manager.createProduct(producto3);
 manager.createProduct(producto4);
 manager.addProduct();
-manager.getProducts();
+// manager.getProducts();
 // console.log(manager.products)
-console.log(manager.getProducts())
+// console.log(manager.getProducts())
 // console.log(manager.deleteProduct(2))
+console.log(manager.updateProduct(1, {
+    price: 1000,
+    stock: 222
+}))
