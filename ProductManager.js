@@ -1,48 +1,80 @@
+const fs = require('fs')
 class ProductManager {
-    static product = []
-    static id = 1
 
-    constructor(id, title, description, price, thumbnail, code, stock) {
-        this.id = id
-        this.title = title
-        this.description = description
-        this.price = price
-        this.thumbnail = thumbnail
-        this.code = code
-        this.stock = stock
+    constructor() {
+        this.path = "./Productos.json"
+        this.products = []
+        this.id = 1
     }
 
-    addProduct(title, description, price, thumbnail, code, stock) {
-        if (title, description, price, thumbnail, code, stock) {
-            const addProduct = new ProductManager(ProductManager.id, title, description, price, thumbnail, code, stock)
-            ProductManager.product.push(addProduct)
-            ProductManager.id++
-        } else {
-            console.log("todos los campos son obligatorios")
-        }
+    createProduct(product) {
+        product.id = this.id++
+        this.products.push(product)
     }
 
-    getProducts() {
-        return ProductManager.product
+    addProduct() {
+        fs.promises.writeFile(this.path, JSON.stringify(this.products));
     }
 
+    getProducts = async () => {
+        const productos = await fs.promises.readFile(this.path, "utf-8");
+        return JSON.parse(productos)
+    }
     getProductById(id) {
-        const product = ProductManager.product.find(product => product.id === id)
+        const product = this.products.find(product => product.id === id)
         if (product) {
             return product
         } else {
             console.log("Not found")
         }
     }
+
+    deleteProduct(id) {
+        this.products = this.products.filter(product => product.id !== id)
+    }
 }
 
-// const m = new ProductManager();
+const producto1 = {
+    title: "title",
+    description: "description",
+    price: 100,
+    thumbnail: "thumbnail",
+    code: 01,
+    stock: 21
+}
 
-// m.addProduct("title", "description", 100, "img", 01, 20);
-// m.addProduct("title", "description", 100, "img", 02, 20);
-// m.addProduct("title", "description", 100, "img", 03, 20);
-// m.addProduct("title", "description", 100, "img", 04, 20);
+const producto2 = {
+    title: "title",
+    description: "description",
+    price: 200,
+    thumbnail: "thumbnail",
+    code: 02,
+    stock: 22
+}
+const producto3 = {
+    title: "title",
+    description: "description",
+    price: 200,
+    thumbnail: "thumbnail",
+    code: 02,
+    stock: 22
+}
+const producto4 = {
+    title: "title",
+    description: "description",
+    price: 200,
+    thumbnail: "thumbnail",
+    code: 02,
+    stock: 22
+}
 
-// console.log(m.getProducts());
-
-// console.log(m.getProductById(2));
+const manager = new ProductManager();
+manager.createProduct(producto1);
+manager.createProduct(producto2);
+manager.createProduct(producto3);
+manager.createProduct(producto4);
+manager.addProduct();
+manager.getProducts();
+// console.log(manager.products)
+// console.log(manager.getProducts())
+// console.log(manager.deleteProduct(2))
